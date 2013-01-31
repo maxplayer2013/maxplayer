@@ -45,6 +45,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.tinyplayer.InlineUtil.Leg;
+import com.example.tinyplayer.widget.PlayerWidgetProvider;
 
 @SuppressLint("NewApi")
 public class Player extends Activity implements OnClickListener, OnTouchListener {
@@ -118,14 +119,6 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         mPlay_pauseButton_slider.setOnClickListener(this);
         mNextButton_slider.setOnClickListener(this);
         
-        if (presentationRouteSelected()) {
-            mBackgroundImage.setImageResource(R.drawable.miracast);
-           /* if(MySlideShowPlayer.isImage){
-	            showSlidingController();
-            }*/
-        } else {
-            mBackgroundImage.setImageResource(R.drawable.background);
-        }
 
         //
         mPredict = 0;
@@ -187,6 +180,14 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 
     @Override
     protected void onResume() {
+    	if (presentationRouteSelected()) {
+            mBackgroundImage.setImageResource(R.drawable.miracast);
+           /* if(MySlideShowPlayer.isImage){
+	            showSlidingController();
+            }*/
+        } else {
+            mBackgroundImage.setImageResource(R.drawable.background);
+        }
     	
     	if(MySlideShowPlayer.isImage){
             showSlidingController();
@@ -250,6 +251,8 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub
 		super.onConfigurationChanged(newConfig);
+		if( mPlaybackService != null)
+			if(mPlaybackService.mMyAVPlayer != null)
 		Leg.d(TAG, "onConfigurationChanged   =======================================================" + mPlaybackService.mMyAVPlayer.getCurrentPosition() );
 		mPlaybackService.mMyAVPlayer.getCurrentPosition();
 	}
@@ -343,7 +346,9 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 
     private void openAboutDialog() {
         Dialog diaLeg = new AlertDialog.Builder(this).setTitle("MaxPlayer")
-                .setMessage("Hi, Max,\n\nThanks for your tremendous help!\nLet's have beers together when you come back.\n\nCheers!")
+                .setMessage("Version 1.1: \nOuyang Jinmiao, Xie Chen.\n1.Added AppWidget.\n2.Fixed some issues." +
+                        "\n\nVersion 1.0: \nTian Yu, Ouyang JinMiao, Liu Bing, Zhang Lei, Xie Chen." +
+                        "\n1.Added Mircast on Actionbar.\n2.Support playing in backService for video and pictures slide-show.")
                 .setNegativeButton("ok", new DialogInterface.OnClickListener() {
 
                     @Override
@@ -580,12 +585,11 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 
         // int old = mPresentationId;
         mPresentationId = newId;
-
         if (Display.DEFAULT_DISPLAY != mPresentationId) {
             // pD.getMetrics(mPresentationDM);
             pD.getWidth();
             pD.getHeight();
-
+            
             showPresentationAvailableDialog();
             mBackgroundImage.setImageResource(R.drawable.miracast);
         } else {
@@ -605,7 +609,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         public void onRouteUnselected(MediaRouter router, int type, RouteInfo info) {
             Leg.d(TAG, "onRouteUnselected: type=" + type + ", info=" + info);
         }
-
+        
         @Override
         public void onRoutePresentationDisplayChanged(MediaRouter router, RouteInfo info) {
             Leg.d(TAG, "onRoutePresentationDisplayChanged: info=" + info);

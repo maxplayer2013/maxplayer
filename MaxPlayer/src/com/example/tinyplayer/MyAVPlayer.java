@@ -9,6 +9,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 
 import com.example.tinyplayer.InlineUtil.Leg;
+import com.example.tinyplayer.widget.PlayerWidgetProvider;
 
 class MyAVPlayer extends MyMediaPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnSeekCompleteListener,
         MediaPlayer.OnCompletionListener, MediaPlayer.OnVideoSizeChangedListener {

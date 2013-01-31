@@ -16,5 +16,18 @@
     <string name="about">about</string>
     <string name="pick">pick</string>
     <string name="dcd"></string>
+    
+    <!-- App widget -->
+    <string name="widget_initial_text">Touch to launch MaxPlayer.</string>
+    
+    <!-- App widget2 -->
+    <string name="accessibility_thumbsUp">accessibility_thumbsUp</string>
+    <string name="accessibility_thumbsDown">accessibility_thumbsDown</string>
+    <string name="accessibility_prev">accessibility_prev</string>
+    <string name="accessibility_play">accessibility_play</string>
+    <string name="accessibility_pause">accessibility_pause</string>
+    <string name="accessibility_stop">accessibility_stop</string>
+    <string name="accessibility_next">accessibility_next</string>
+    <string name="appwidget_text_separator">-</string>
 
 </resources>

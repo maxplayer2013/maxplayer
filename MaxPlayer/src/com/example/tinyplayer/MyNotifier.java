@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import com.example.tinyplayer.InlineUtil.Leg;
+import com.example.tinyplayer.widget.PlayerWidgetProvider;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -24,6 +25,7 @@ public class MyNotifier {
     public static final String TAG = MyNotifier.class.getSimpleName();
     private Context mApplicationContext;
     private PlaybackService mPlaybackService;
+    private PlayerWidgetProvider mPlayerWidgetProvider = PlayerWidgetProvider.getInstance();
 
     public MyNotifier(PlaybackService service) {
         mPlaybackService = service;
@@ -32,12 +34,16 @@ public class MyNotifier {
 
     public void cancel() {
         mNotificationManager.cancel(BACKGROUND_PLAYBACK_ONGOING);
+        //update widget
+        mPlayerWidgetProvider.performUpdate(mPlaybackService, null, MyMediaPlayer.PLAYBACK_STATE.IDLE);
     }
 
     public void notifyPlaybackState(MyMediaPlayer.PLAYBACK_STATE state) {
         Notification notification = buildNotificationICS(state);
         // notification.defaults = Notification.DEFAULT_SOUND;
         mNotificationManager.notify(BACKGROUND_PLAYBACK_ONGOING, notification);
+        //update widget
+        mPlayerWidgetProvider.performUpdate(mPlaybackService, null, state);
     }
 
     //
@@ -58,10 +64,10 @@ public class MyNotifier {
 
     // ======about notification====== //
     private NotificationManager mNotificationManager;
-    private PendingIntent mActivityIntent = null;
-    private PendingIntent mServicePauseIntent = null;
-    private PendingIntent mServiceResumeIntent = null;
-    private PendingIntent mServiceStopIntent = null;
+    public static PendingIntent mActivityIntent = null;
+    public static PendingIntent mServicePauseIntent = null;
+    public static PendingIntent mServiceResumeIntent = null;
+    public static PendingIntent mServiceStopIntent = null;
     private Intent serviceIntent1 = null;
     private Intent serviceIntent2 = null;
     private Intent serviceIntent3 = null;

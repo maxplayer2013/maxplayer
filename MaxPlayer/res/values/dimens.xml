@@ -46,7 +46,7 @@
     <dimen name="max_album_art_size">200.0dip</dimen>
     <dimen name="album_art_thumb_size">128.0dip</dimen>
     <dimen name="widget_np_small_min_width">250.0dip</dimen>
-    <dimen name="widget_np_small_min_height">40.0dip</dimen>
+    <dimen name="widget_np_small_min_height">50.0dip</dimen>
     <dimen name="widget_np_small_padding">10.0dip</dimen>
     <dimen name="widget_np_small_album_art_size">48.0dip</dimen>
     <dimen name="widget_np_large_album_art_size">120.0dip</dimen>
@@ -159,5 +159,5 @@
     <dimen name="minimum_section_height_large">112.0dip</dimen>
     <dimen name="listPreferredItemPadding">16.0dip</dimen>
     <dimen name="listPreferredItemHeightSmall">48.0dip</dimen>
-
+    
 </resources>

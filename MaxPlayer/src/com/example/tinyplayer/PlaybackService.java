@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.tinyplayer.InlineUtil.Leg;
+import com.example.tinyplayer.widget.PlayerWidgetProvider;
 
 import android.annotation.SuppressLint;
 import android.app.Presentation;
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Display;
@@ -37,9 +40,9 @@ public class PlaybackService extends Service {
     public static boolean STOP_SERVICE_ON_COMPLETE = true;
     public static boolean RESET_ON_GO_BACKGROUND = true;
     
-    public static boolean SERVICE_STARTED = false;
-    private Intent mIntent;
-    
+    public static String WIDGET_CHANGE="widgetchange"; 
+    private PlayerWidgetProvider mAppWidgetProvider = PlayerWidgetProvider.getInstance();
+
     @Override
     public IBinder onBind(Intent arg0) {
         return this.binder;
@@ -55,14 +58,16 @@ public class PlaybackService extends Service {
         mMySildShowPlayer = new MySlideShowPlayer(this, mNotifier);
 
         mDisplayManager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
+        
+        notifyChange(WIDGET_CHANGE);
+        
+        IntentFilter commandFilter = new IntentFilter();
+        commandFilter.addAction(MyNotifier.SERVICE_STARTER_KEY);
+        registerReceiver(mIntentReceiver, commandFilter);
 
         Leg.d(TAG, "onCreate ============================= service " ) ;
         // Toast.makeText(this, "PlaybackService created ...",
         // Toast.LENGTH_LONG).show();
-        SERVICE_STARTED = true;
-        mIntent = new Intent();
-        mIntent.putExtra("Svcstarted", SERVICE_STARTED);
-        sendBroadcast(mIntent);
     }
 
     @Override
@@ -340,6 +345,14 @@ public class PlaybackService extends Service {
 
         return ret;
     }
+    
+    public boolean isConnectDisplay(){
+    	String displayCategory = DisplayManager.DISPLAY_CATEGORY_PRESENTATION;
+        Display[] displays = mDisplayManager.getDisplays(displayCategory);
+        if (displays.length > 0) 
+        	return true;
+        return false;
+    }
 
     PresentationSlideShow mSlideShowPresentation;
     PresentationVideo mVideoPresentation;
@@ -357,6 +370,7 @@ public class PlaybackService extends Service {
     }
 
     public void pausePlayback() {
+    	Log.i(TAG, "pausePlayback()");
         if (mMyAVPlayer.getPlaybackState() == MyMediaPlayer.PLAYBACK_STATE.PAUSED) {
             mMyAVPlayer.start();
         } else if (mMySildShowPlayer.getPlaybackState() == MyMediaPlayer.PLAYBACK_STATE.PAUSED) {
@@ -365,6 +379,7 @@ public class PlaybackService extends Service {
     }
 
     public void resumePlayback() {
+    	Log.i(TAG, "resumePlayback()");
         if (mMyAVPlayer.getPlaybackState() == MyMediaPlayer.PLAYBACK_STATE.PLAYING) {
             mMyAVPlayer.pause();
         } else if (mMySildShowPlayer.getPlaybackState() == MyMediaPlayer.PLAYBACK_STATE.PLAYING) {
@@ -395,6 +410,7 @@ public class PlaybackService extends Service {
             }
 
             mNotifier.collapseStatusBar();
+            notifyChange(WIDGET_CHANGE);
         }
     }
 
@@ -447,5 +463,26 @@ public class PlaybackService extends Service {
     	
     	mMySildShowPlayer.setpausePlayback();
     }
+    
+    //
+    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        	Log.i(TAG,"::::BroadcastReceiver:::::onReceive");
+            String cmd = intent.getStringExtra("service_command");
+            if (PlayerWidgetProvider.CMDAPPWIDGETUPDATE.equals(cmd)) {
+            	notifyChange(WIDGET_CHANGE);
+            }
+        }
+    };
+    
+    /**
+     *  App widget: Notify the change-receivers that something has changed.
+     */
+    public void notifyChange(String what){
+    	Log.i(TAG, "App widget notifyChange, what = "+what);
+    	mAppWidgetProvider.notifyChange(this, what, getPlaybackState());
+    }
+    
     
 }
