@@ -1,0 +1,20 @@
+<resources>
+
+    <string name="app_name">MaxPlayer</string>
+    <string name="hello_world">Background Playback &#8230;</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_player">MaxPlayer</string>
+    <string name="switch_orientation">Toggle orientation</string>
+    <string name="switch_looping">Toggle looping</string>
+
+    <!-- dialog -->
+    <string name="display_model_select">Change display model to XXX?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Menu -->
+    <string name="about">about</string>
+    <string name="pick">pick</string>
+    <string name="dcd"></string>
+
+</resources>

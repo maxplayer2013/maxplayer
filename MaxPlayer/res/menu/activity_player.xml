@@ -1,0 +1,34 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@id/menu_item_pick_video"
+        android:icon="@drawable/ic_menu_archive"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:visible="true"/>
+    <item
+        android:id="@id/menu_item_switch_orientation"
+        android:orderInCategory="101"
+        android:showAsAction="never"
+        android:title="@string/switch_orientation"
+        android:visible="false"/>
+    <item
+        android:id="@id/menu_item_switch_looping"
+        android:orderInCategory="102"
+        android:showAsAction="never"
+        android:title="@string/switch_looping"
+        android:visible="true"/>
+    <item
+        android:id="@id/menu_item_about"
+        android:orderInCategory="104"
+        android:showAsAction="never"
+        android:title="@string/about"
+        android:visible="true"/>
+    <item
+        android:id="@+id/menu_media_route"
+        android:actionProviderClass="android.app.MediaRouteActionProvider"
+        android:orderInCategory="103"
+        android:showAsAction="always"
+        android:title="play on"/>
+
+</menu>
