@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -150,7 +151,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         
         mediaControllerLayout = findViewById(R.id.mediaControllerLayout);
         mSeekBar = (SeekBar) findViewById(R.id.videoSeekBar);
-        mSeekBar.setProgress(0);
+        
         
         mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
@@ -173,6 +174,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         });
         
 		scheduledExecutorService = Executors.newScheduledThreadPool(1);
+		handler = new Handler();
         
 		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
 
@@ -181,11 +183,16 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
+						Log.d(TAG, "test-----");
 						if (mPlaybackService.isPlaying()) {
+							Log.d(TAG, "test++++");
 							int position = mPlaybackService
 									.getCurrentPosition();
 							int duration = mPlaybackService.getDuration();
-							mSeekBar.setProgress((int) (position
+							Log.d(TAG, "test++++" + Integer.toString(duration) + Integer.toString(position));
+							mSeekBar.setProgress((int) ((float)position
+									/ (float)duration * mSeekBar.getMax()));
+							Log.d(TAG, "test++++" + (int) (position
 									/ duration * mSeekBar.getMax()));
 						}
 					}
