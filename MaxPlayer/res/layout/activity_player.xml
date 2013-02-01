@@ -12,22 +12,22 @@
         android:scaleType="fitXY"
         android:src="@drawable/background" />
 
-	<FrameLayout
+    <FrameLayout
+        android:id="@+id/video_frame"
         android:layout_width="392dip"
         android:layout_height="350dip"
         android:layout_centerHorizontal="true"
-        android:id="@+id/video_frame"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="16dip">
-        <!-- 
-        
-         -->
+        android:layout_marginBottom="16dip" >
+
+<!--   -->
+
         <SurfaceView
-            android:alpha="0.5"
             android:id="@+id/video_surface"
-            android:background="#FFCCCCCC"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:alpha="0.5"
+            android:background="#FFCCCCCC" >
         </SurfaceView>
 
         <ImageView
@@ -37,32 +37,33 @@
             android:layout_gravity="center" />
     </FrameLayout>
 
-   <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="1dip"
-            android:layout_marginBottom="2dip"
-            android:layout_centerInParent="true"
-            android:layout_alignParentBottom="true">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="2dip"
+        android:layout_marginTop="1dip"
+        android:orientation="horizontal" >
 
-            <com.example.tinyplayer.RepeatingImageButton android:id="@+id/prev"
-                style="@android:style/MediaButton.Previous"
-                android:visibility="gone"
-                android:background="@drawable/btn_default_background" />
+        <com.example.tinyplayer.RepeatingImageButton
+            android:id="@+id/prev"
+            style="@android:style/MediaButton.Previous"
+            android:background="@drawable/btn_default_background"
+            android:visibility="gone" />
 
-            <ImageButton android:id="@+id/pause"
-                style="@android:style/MediaButton.Play"
-                android:visibility="gone"
-                android:background="@drawable/btn_default_background" />
+        <ImageButton
+            android:id="@+id/pause"
+            style="@android:style/MediaButton.Play"
+            android:background="@drawable/btn_default_background"
+            android:visibility="gone" />
 
-            <com.example.tinyplayer.RepeatingImageButton android:id="@+id/next"
-                style="@android:style/MediaButton.Next"
-                android:visibility="gone"
-                android:background="@drawable/btn_default_background" />
-
-        </LinearLayout>
-
+        <com.example.tinyplayer.RepeatingImageButton
+            android:id="@+id/next"
+            style="@android:style/MediaButton.Next"
+            android:background="@drawable/btn_default_background"
+            android:visibility="gone" />
+    </LinearLayout>
 
 </RelativeLayout>

@@ -24,7 +24,7 @@ public class MySlideShowPlayer extends MyMediaPlayer {
     private ArrayList<Uri> mUriList = new ArrayList<Uri>();
     private int mPC = 0;
     private int mSavedPC = 0;
-	static boolean isImage = false;
+    static boolean isImage = false;
 
     public MySlideShowPlayer(PlaybackService service, MyNotifier notifier) {
         mPlaybackService = service;
@@ -99,7 +99,8 @@ public class MySlideShowPlayer extends MyMediaPlayer {
     }
 
     public void updateImageView() {
-    	Leg.i(TAG, "updateImageView -----------------------------1111111111----------------------------> >>> : mPC " + mPC );
+        Leg.i(TAG, "updateImageView -----------------------------1111111111----------------------------> >>> : mPC "
+                + mPC);
         if (mImageView != null) {
 
             int size = mUriList.size();
@@ -108,7 +109,7 @@ public class MySlideShowPlayer extends MyMediaPlayer {
                 if (mPC >= size && !mLooping) {
                     mPC = 0;
                     onCompletion();
-                    isImage  = false;
+                    isImage = false;
                     return;
                 }
 
@@ -128,7 +129,9 @@ public class MySlideShowPlayer extends MyMediaPlayer {
 
                 if (foundImage && uri != null) {
                     mImageView.setImageURI(uri);
-                    Leg.i(TAG, "updateImageView -----------------------------2222222----------------------------> >>> : mPC " + mPC );
+                    Leg.i(TAG,
+                            "updateImageView -----------------------------2222222----------------------------> >>> : mPC "
+                                    + mPC);
                     // imageView.setPadding(left, top, right, bottom);
                     mPC++;
                     mRefreshHandler.schedualMessage(UPDATE_UI, 1500);
@@ -168,39 +171,42 @@ public class MySlideShowPlayer extends MyMediaPlayer {
     }
 
     boolean mLooping = false;
-	private boolean mPaused = false;
+    private boolean mPaused = false;
 
     public void swapLooping() {
         mLooping = !mLooping;
     }
 
-	public void setPreviousPic() {
-		// TODO Auto-generated method stub
-		mRefreshHandler.removeMessages(UPDATE_UI);
-		Leg.i(TAG, "========================================set previous pic , mPc = " + mPC + ", size : " + mUriList.size());
-		if(mPC <2) return;
-			mImageView.setImageURI(mUriList.get(mPC-2));
-			mPC--;
-			Leg.i(TAG, "===============>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set previous pic , mPc = " + mPC);
-	}
+    public void setPreviousPic() {
+        // TODO Auto-generated method stub
+        mRefreshHandler.removeMessages(UPDATE_UI);
+        Leg.i(TAG,
+                "========================================set previous pic , mPc = " + mPC + ", size : "
+                        + mUriList.size());
+        if (mPC < 2)
+            return;
+        mImageView.setImageURI(mUriList.get(mPC - 2));
+        mPC--;
+        Leg.i(TAG, "===============>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set previous pic , mPc = " + mPC);
+    }
 
-	public void setNextPic() {
-		// TODO Auto-generated method stub
-		Leg.i(TAG, "========================================set next pic , mPc = " + mPC + ", size : " + mUriList.size());
-		mRefreshHandler.removeMessages(UPDATE_UI);
-		
-		if(mPC >= mUriList.size()) return;
-			mImageView.setImageURI(mUriList.get(mPC));
-			mPC++;
-			Leg.i(TAG, "===============>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set next pic , mPc = " + mPC);
-	}
+    public void setNextPic() {
+        // TODO Auto-generated method stub
+        Leg.i(TAG,
+                "========================================set next pic , mPc = " + mPC + ", size : " + mUriList.size());
+        mRefreshHandler.removeMessages(UPDATE_UI);
 
-	public void setpausePlayback() {
-		// TODO Auto-generated method stub
-		if(! mRefreshHandler.hasMessages(UPDATE_UI))
-			mRefreshHandler.schedualMessage(UPDATE_UI, 1500);
-	};
-	
-	
-	
+        if (mPC >= mUriList.size())
+            return;
+        mImageView.setImageURI(mUriList.get(mPC));
+        mPC++;
+        Leg.i(TAG, "===============>>>>>>>>>>>>>>>>>>>>>>>>>>>>>set next pic , mPc = " + mPC);
+    }
+
+    public void setpausePlayback() {
+        // TODO Auto-generated method stub
+        if (!mRefreshHandler.hasMessages(UPDATE_UI))
+            mRefreshHandler.schedualMessage(UPDATE_UI, 1500);
+    };
+
 }

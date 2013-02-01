@@ -64,7 +64,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
     ImageButton mNextButton_slider;
     ImageButton mPreviousButton_slider;
     ImageButton mPlay_pauseButton_slider;
-    
+
     SurfaceHolder mSurfaceHolder;
 
     //
@@ -89,7 +89,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         super.onCreate(savedInstanceState);
 
         if (!isPortrait()) {
-//            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            // requestWindowFeature(Window.FEATURE_NO_TITLE);
             updateFullscreenStatus(true);
         }
         setContentView(R.layout.activity_player);
@@ -102,11 +102,11 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 
         mPauseImage = (ImageView) findViewById(R.id.play_pause);
         mVideoSurface = (SurfaceView) findViewById(R.id.video_surface);
-        
+
         mPreviousButton_slider = (ImageButton) findViewById(R.id.prev);
         mPlay_pauseButton_slider = (ImageButton) findViewById(R.id.pause);
-        mNextButton_slider =  (ImageButton) findViewById(R.id.next);
-        
+        mNextButton_slider = (ImageButton) findViewById(R.id.next);
+
         mVideoSurface.setZOrderOnTop(true);
         mVideoSurface.setAlpha((float) 0.18);
         mVideoSurface.getHolder().setFormat(PixelFormat.TRANSLUCENT);
@@ -114,11 +114,10 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         mPauseImage.setOnClickListener(this);
         mVideoSurface.setOnClickListener(this);
         mVideoSurface.setOnTouchListener(this);
-        
+
         mPreviousButton_slider.setOnClickListener(this);
         mPlay_pauseButton_slider.setOnClickListener(this);
         mNextButton_slider.setOnClickListener(this);
-        
 
         //
         mPredict = 0;
@@ -127,31 +126,31 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         //
         mDefaultDM = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(mDefaultDM);
-        
-        this.registerReceiver(new BroadcastReceiver(){
 
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				// TODO Auto-generated method stub
-				dismissSlidingController();
-			}
-        	
+        this.registerReceiver(new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // TODO Auto-generated method stub
+                dismissSlidingController();
+            }
+
         }, mIntentfl);
-        
+
     }
 
-	private void showSlidingController() {
-		mPreviousButton_slider.setVisibility(View.VISIBLE);
-		mPlay_pauseButton_slider.setVisibility(View.VISIBLE);
-		mNextButton_slider.setVisibility(View.VISIBLE);
-	}
-    
-	private void dismissSlidingController(){
-		mPreviousButton_slider.setVisibility(View.INVISIBLE);
-		mPlay_pauseButton_slider.setVisibility(View.INVISIBLE);
-		mNextButton_slider.setVisibility(View.INVISIBLE);
-	}
-	
+    private void showSlidingController() {
+        mPreviousButton_slider.setVisibility(View.VISIBLE);
+        mPlay_pauseButton_slider.setVisibility(View.VISIBLE);
+        mNextButton_slider.setVisibility(View.VISIBLE);
+    }
+
+    private void dismissSlidingController() {
+        mPreviousButton_slider.setVisibility(View.INVISIBLE);
+        mPlay_pauseButton_slider.setVisibility(View.INVISIBLE);
+        mNextButton_slider.setVisibility(View.INVISIBLE);
+    }
+
     @Override
     protected void onRestart() {
         Leg.i(TAG, "onRestart()");
@@ -180,19 +179,19 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 
     @Override
     protected void onResume() {
-    	if (presentationRouteSelected()) {
+        if (presentationRouteSelected()) {
             mBackgroundImage.setImageResource(R.drawable.miracast);
-           /* if(MySlideShowPlayer.isImage){
-	            showSlidingController();
-            }*/
+            /*
+             * if(MySlideShowPlayer.isImage){ showSlidingController(); }
+             */
         } else {
             mBackgroundImage.setImageResource(R.drawable.background);
         }
-    	
-    	if(MySlideShowPlayer.isImage){
+
+        if (MySlideShowPlayer.isImage) {
             showSlidingController();
         }
-    	
+
         Leg.i(TAG, "onResume()============================================================");
         doBindPlaybackService();
         mMediaRouter.addCallback(MediaRouter.ROUTE_TYPE_LIVE_VIDEO, mMediaRouterCallback);
@@ -237,27 +236,26 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         getMenuInflater().inflate(R.menu.activity_player, menu);
 
         MenuItem mediaRouteMenuItem = menu.findItem(R.id.menu_media_route);
-        if(mediaRouteMenuItem != null){
-        	MediaRouteActionProvider mediaRouteActionProvider = (MediaRouteActionProvider) mediaRouteMenuItem
-                .getActionProvider();
-        	mediaRouteActionProvider.setRouteTypes(MediaRouter.ROUTE_TYPE_LIVE_VIDEO);
+        if (mediaRouteMenuItem != null) {
+            MediaRouteActionProvider mediaRouteActionProvider = (MediaRouteActionProvider) mediaRouteMenuItem
+                    .getActionProvider();
+            mediaRouteActionProvider.setRouteTypes(MediaRouter.ROUTE_TYPE_LIVE_VIDEO);
         }
         return true;
     }
 
-    
-    
     @Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		// TODO Auto-generated method stub
-		super.onConfigurationChanged(newConfig);
-		if( mPlaybackService != null)
-			if(mPlaybackService.mMyAVPlayer != null)
-		Leg.d(TAG, "onConfigurationChanged   =======================================================" + mPlaybackService.mMyAVPlayer.getCurrentPosition() );
-		mPlaybackService.mMyAVPlayer.getCurrentPosition();
-	}
+    public void onConfigurationChanged(Configuration newConfig) {
+        // TODO Auto-generated method stub
+        super.onConfigurationChanged(newConfig);
+        if (mPlaybackService != null)
+            if (mPlaybackService.mMyAVPlayer != null)
+                Leg.d(TAG, "onConfigurationChanged   ======================================================="
+                        + mPlaybackService.mMyAVPlayer.getCurrentPosition());
+        mPlaybackService.mMyAVPlayer.getCurrentPosition();
+    }
 
-	@Override
+    @Override
     public void onBackPressed() {
         if (mPlaybackService != null) {
             mPlaybackService.stopPlayback();
@@ -267,7 +265,8 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 
     @Override
     public void onClick(View v) {
-    	if (mPlaybackService == null) return;
+        if (mPlaybackService == null)
+            return;
         if (v == mPauseImage || v == mVideoSurface) {
             if (mPlaybackService != null) {
                 MyMediaPlayer.PLAYBACK_STATE state = mPlaybackService.getPlaybackState();
@@ -287,19 +286,19 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
                 }
 
             }
-        } else if (v == mNextButton_slider ){
-        	
-        	mPlaybackService.setNextPic();
-        	
-        	Leg.i(TAG, "mNextButton_slider ====================== ");
-        	
-        } else if (v == mPreviousButton_slider ){
-        	Leg.i(TAG, "mPreviousButton_slider ====================== ");
-        	mPlaybackService.setPreviousPic();
-        	
-        } else if (v == mPlay_pauseButton_slider ){
-        	mPlaybackService.setpausePlayback();
-        	
+        } else if (v == mNextButton_slider) {
+
+            mPlaybackService.setNextPic();
+
+            Leg.i(TAG, "mNextButton_slider ====================== ");
+
+        } else if (v == mPreviousButton_slider) {
+            Leg.i(TAG, "mPreviousButton_slider ====================== ");
+            mPlaybackService.setPreviousPic();
+
+        } else if (v == mPlay_pauseButton_slider) {
+            mPlaybackService.setpausePlayback();
+
         }
 
     }
@@ -345,10 +344,12 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
     }
 
     private void openAboutDialog() {
-        Dialog diaLeg = new AlertDialog.Builder(this).setTitle("MaxPlayer")
-                .setMessage("Version 1.1: \nOuyang Jinmiao, Xie Chen.\n1.Added AppWidget.\n2.Fixed some issues." +
-                        "\n\nVersion 1.0: \nTian Yu, Ouyang JinMiao, Liu Bing, Zhang Lei, Xie Chen." +
-                        "\n1.Added Mircast on Actionbar.\n2.Support playing in backService for video and pictures slide-show.")
+        Dialog diaLeg = new AlertDialog.Builder(this)
+                .setTitle("MaxPlayer")
+                .setMessage(
+                        "Version 1.1: \nOuyang Jinmiao, Xie Chen.\n1.Added AppWidget.\n2.Fixed some issues."
+                                + "\n\nVersion 1.0: \nTian Yu, Ouyang JinMiao, Liu Bing, Zhang Lei, Xie Chen."
+                                + "\n1.Added Mircast on Actionbar.\n2.Support playing in backService for video and pictures slide-show.")
                 .setNegativeButton("ok", new DialogInterface.OnClickListener() {
 
                     @Override
@@ -435,7 +436,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
                 if (mPlayer.presentationRouteSelected()) {
                     mPlayer.startPlaybackInService(false, true);
                 } else {
-                		mPlayer.startPlaybackInService(true, true);
+                    mPlayer.startPlaybackInService(true, true);
                 }
                 break;
             case STOP_PLAY_BACK:
@@ -466,7 +467,8 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Leg.i(TAG, String.format("================================requestCode:%d, resultCode:%d", requestCode, resultCode));
+        Leg.i(TAG,
+                String.format("================================requestCode:%d, resultCode:%d", requestCode, resultCode));
         if (requestCode == PICK_VIDEO_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
 
@@ -491,7 +493,9 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
     // start fg, start bg, continue bg
 
     void startPlaybackInService(boolean fg, boolean freshStart) {
-        Leg.i(TAG, "startPlaybackInService =====================  mUris : " + mUris.size() + ", muris :" + mUris.toString());
+        Leg.i(TAG,
+                "startPlaybackInService =====================  mUris : " + mUris.size() + ", muris :"
+                        + mUris.toString());
 
         Intent localIntent = mStartIntent;
         localIntent.setClass(this, PlaybackService.class);
@@ -556,7 +560,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         localIntent.putExtra("com.example.tinyplayer.CurrentPosition", 0);
         localIntent.putExtra("com.example.tinyplayer.StartAtOnce", false);
         ComponentName name = startService(localIntent);
-        Leg.i(TAG, "going to bound service ,++++++++++++++++++++++++++++++++++ name : " +name);
+        Leg.i(TAG, "going to bound service ,++++++++++++++++++++++++++++++++++ name : " + name);
         if (name != null) {
             bindService(new Intent(Player.this, PlaybackService.class), mConnection, Context.BIND_AUTO_CREATE);
         }
@@ -589,17 +593,17 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
             // pD.getMetrics(mPresentationDM);
             pD.getWidth();
             pD.getHeight();
-            
+
             showPresentationAvailableDialog();
             mBackgroundImage.setImageResource(R.drawable.miracast);
         } else {
-        	dismissSlidingController();
+            dismissSlidingController();
             mBackgroundImage.setImageResource(R.drawable.background);
         }
     }
 
     @SuppressLint("NewApi")
-	private final MediaRouter.SimpleCallback mMediaRouterCallback = new MediaRouter.SimpleCallback() {
+    private final MediaRouter.SimpleCallback mMediaRouterCallback = new MediaRouter.SimpleCallback() {
         @Override
         public void onRouteSelected(MediaRouter router, int type, RouteInfo info) {
             Leg.d(TAG, "onRouteSelected: type=" + type + ", info=" + info);
@@ -609,7 +613,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         public void onRouteUnselected(MediaRouter router, int type, RouteInfo info) {
             Leg.d(TAG, "onRouteUnselected: type=" + type + ", info=" + info);
         }
-        
+
         @Override
         public void onRoutePresentationDisplayChanged(MediaRouter router, RouteInfo info) {
             Leg.d(TAG, "onRoutePresentationDisplayChanged: info=" + info);
@@ -659,22 +663,22 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 
         String action = mStartIntent.getAction();
         String type = mStartIntent.getType();
-        Leg.i(TAG, "action: "+action+", type: " + type);
-        
+        Leg.i(TAG, "action: " + action + ", type: " + type);
+
         if ("INNER_ACTION_PROCESSED".equals(action)) {
             return;
         }
-        
+
         boolean sliding = mStartIntent.getBooleanExtra("com.example.tinyplayer.sliding", false);
 
-        if(sliding){
-        	//dismissSlidingController();
+        if (sliding) {
+            // dismissSlidingController();
         }
-        
+
         Intent newIntent = new Intent(mStartIntent);
         newIntent.setAction("INNER_ACTION_PROCESSED");
         setIntent(newIntent);
-        //android.intent.action.MAIN
+        // android.intent.action.MAIN
 
         mUris.clear();
 
@@ -704,7 +708,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
             if (temp != null) {
                 mUris.add(temp);
             }
-        } 
+        }
 
         int size = mUris.size();
         Leg.i(TAG, "size of mUris: " + size);
@@ -755,9 +759,9 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
             Leg.i(TAG, "prediction: send start playback message");
             mHandler.removeMessages(START_PLAY_BACK);
             mHandler.removeMessages(STOP_PLAY_BACK);
-            if(!mPlaybackService.isPlaying()){
-	            mHandler.obtainMessage(STOP_PLAY_BACK).sendToTarget();
-	            mHandler.obtainMessage(START_PLAY_BACK).sendToTarget();
+            if (!mPlaybackService.isPlaying()) {
+                mHandler.obtainMessage(STOP_PLAY_BACK).sendToTarget();
+                mHandler.obtainMessage(START_PLAY_BACK).sendToTarget();
             }
         }
 
@@ -800,6 +804,5 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
     // Auto-generated method stub
     // super.onConfigurationChanged(newConfig);
     // }
-    
-    
+
 }

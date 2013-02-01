@@ -20,10 +20,10 @@ public abstract class MyMediaPlayer {
         return mPlaybackState == PLAYBACK_STATE.PLAYING;
     }
 
-    public int savePositionForNextPlayback(){
+    public int savePositionForNextPlayback() {
         return 0;
     }
-    
+
     public void onPlaybackStateChanged(PLAYBACK_STATE state) {
         mPlaybackState = state;
     }

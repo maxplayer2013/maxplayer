@@ -34,7 +34,7 @@ public class MyNotifier {
 
     public void cancel() {
         mNotificationManager.cancel(BACKGROUND_PLAYBACK_ONGOING);
-        //update widget
+        // update widget
         mPlayerWidgetProvider.performUpdate(mPlaybackService, null, MyMediaPlayer.PLAYBACK_STATE.IDLE);
     }
 
@@ -42,7 +42,7 @@ public class MyNotifier {
         Notification notification = buildNotificationICS(state);
         // notification.defaults = Notification.DEFAULT_SOUND;
         mNotificationManager.notify(BACKGROUND_PLAYBACK_ONGOING, notification);
-        //update widget
+        // update widget
         mPlayerWidgetProvider.performUpdate(mPlaybackService, null, state);
     }
 

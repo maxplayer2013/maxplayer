@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<!--
+     Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,79 +18,72 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@drawable/appwidget_bg">
+    android:background="@drawable/appwidget_bg"
+    android:orientation="horizontal" >
 
-   <LinearLayout
+    <LinearLayout
         android:id="@+id/album_appwidget"
         android:layout_width="0dip"
-        android:layout_weight="3"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_vertical"
+        android:layout_weight="3"
+        android:background="@drawable/appwidget_button_left"
         android:clickable="true"
         android:focusable="true"
-	    android:background="@drawable/appwidget_button_left"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
         android:paddingLeft="18dip"
-        android:paddingRight="8dip"
-        >
+        android:paddingRight="8dip" >
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/appwidget_text"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:singleLine="true"
+            android:ellipsize="none"
             android:fadingEdge="horizontal"
             android:fadingEdgeLength="10dip"
-            android:ellipsize="none"
-            />
+            android:singleLine="true"
+            android:textColor="@color/appwidget_text"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/artist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/appwidget_text"
-            android:textSize="14sp"
-            android:singleLine="true"
+            android:ellipsize="none"
             android:fadingEdge="horizontal"
             android:fadingEdgeLength="10dip"
-            android:ellipsize="none"
-            />
+            android:singleLine="true"
+            android:textColor="@color/appwidget_text"
+            android:textSize="14sp" />
     </LinearLayout>
-    
- 	<ImageView
+
+    <ImageView
         android:layout_width="1dip"
         android:layout_height="match_parent"
-        android:background="@drawable/appwidget_divider"
-        />
-        
+        android:background="@drawable/appwidget_divider" />
+
     <ImageButton
         android:id="@+id/control_play"
         android:layout_width="0dip"
-        android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_appwidget_music_play"
+        android:layout_weight="1"
         android:background="@drawable/appwidget_button_center"
         android:scaleType="center"
-        />
+        android:src="@drawable/ic_appwidget_music_play" />
 
- 	<ImageView
+    <ImageView
         android:layout_width="1dip"
         android:layout_height="match_parent"
-        android:background="@drawable/appwidget_divider"
-        />
-        
+        android:background="@drawable/appwidget_divider" />
+
     <ImageButton
         android:id="@+id/control_next"
         android:layout_width="0dip"
-        android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_appwidget_music_next"
+        android:layout_weight="1"
         android:background="@drawable/appwidget_button_right"
         android:scaleType="center"
-        />
+        android:src="@drawable/ic_appwidget_music_next" />
 
 </LinearLayout>

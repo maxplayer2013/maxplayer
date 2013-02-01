@@ -43,7 +43,7 @@ public class PresentationVideo extends Presentation {
 
                 mMyAVPlayer.startPlayback(false);
                 mMyAVPlayer.resetPlayback();
-//                mMyAVPlayer.setSurface(false, surface);
+                // mMyAVPlayer.setSurface(false, surface);
                 mMyAVPlayer.setDisplay(false, mSurfaceView.getHolder());
                 // mMyMediaPlayer.setDataSource(getRealPathFromURI(mVideoUri));
                 mMyAVPlayer.setDataSource(mVideoUri);
@@ -83,14 +83,13 @@ public class PresentationVideo extends Presentation {
         mSurfaceView = (SurfaceView) findViewById(R.id.video_surface);
         mSurfaceView.getHolder().addCallback(new SimpleSurfaceHolderCallback());
 
-
     }
 
     @Override
     protected void onStop() {
         Leg.i(TAG, "onStop()");
         mMyAVPlayer.stopPlayback();
-//        mMyAVPlayer.mPlayVideoInPresentation = false;
+        // mMyAVPlayer.mPlayVideoInPresentation = false;
         super.onStop();
     }
 

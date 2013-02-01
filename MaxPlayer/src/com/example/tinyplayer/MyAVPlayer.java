@@ -272,14 +272,14 @@ class MyAVPlayer extends MyMediaPlayer implements MediaPlayer.OnPreparedListener
             Leg.i(TAG, "holder is null");
         } else {
             Leg.i(TAG, "surface is valide? " + holder.getSurface().isValid());
-            if(!holder.getSurface().isValid()){
+            if (!holder.getSurface().isValid()) {
                 valid = false;
             }
         }
-        if(valid){
+        if (valid) {
             mMediaPlayer.setDisplay(holder);
-        }else{
-            mMediaPlayer.setDisplay(null);            
+        } else {
+            mMediaPlayer.setDisplay(null);
         }
     }
 
@@ -353,14 +353,14 @@ class MyAVPlayer extends MyMediaPlayer implements MediaPlayer.OnPreparedListener
     }
 
     @Override
-    public int savePositionForNextPlayback(){
+    public int savePositionForNextPlayback() {
         Leg.i(TAG, "savePositionForNextPlayback()");
-        if(isPlaying()){
+        if (isPlaying()) {
             setStartAt(mMediaPlayer.getCurrentPosition());
         }
         return mStartAt;
     }
-    
+
     public void start() {
         Leg.i(TAG, "start()");
         if (mMediaPlayer != null) {
@@ -380,7 +380,7 @@ class MyAVPlayer extends MyMediaPlayer implements MediaPlayer.OnPreparedListener
         if (mMediaPlayer != null) {
             mMediaPlayer.pause();
             pausedPosition = mMediaPlayer.getCurrentPosition();
-            Leg.i(TAG, "pause() ============================================= : pausedPosition : " +pausedPosition);
+            Leg.i(TAG, "pause() ============================================= : pausedPosition : " + pausedPosition);
             onPlaybackStateChanged(PLAYBACK_STATE.PAUSED, false);
         }
     }

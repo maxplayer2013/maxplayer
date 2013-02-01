@@ -39,8 +39,8 @@ public class PlaybackService extends Service {
     private SurfaceHolder mForgroundSurfaceHolder = null;
     public static boolean STOP_SERVICE_ON_COMPLETE = true;
     public static boolean RESET_ON_GO_BACKGROUND = true;
-    
-    public static String WIDGET_CHANGE="widgetchange"; 
+
+    public static String WIDGET_CHANGE = "widgetchange";
     private PlayerWidgetProvider mAppWidgetProvider = PlayerWidgetProvider.getInstance();
 
     @Override
@@ -58,14 +58,14 @@ public class PlaybackService extends Service {
         mMySildShowPlayer = new MySlideShowPlayer(this, mNotifier);
 
         mDisplayManager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
-        
+
         notifyChange(WIDGET_CHANGE);
-        
+
         IntentFilter commandFilter = new IntentFilter();
         commandFilter.addAction(MyNotifier.SERVICE_STARTER_KEY);
         registerReceiver(mIntentReceiver, commandFilter);
 
-        Leg.d(TAG, "onCreate ============================= service " ) ;
+        Leg.d(TAG, "onCreate ============================= service ");
         // Toast.makeText(this, "PlaybackService created ...",
         // Toast.LENGTH_LONG).show();
     }
@@ -130,10 +130,10 @@ public class PlaybackService extends Service {
 
         boolean binding = paramIntent.getBooleanExtra("com.example.tinyplayer.Binding", false);
         Leg.i(TAG, "isBinding: " + binding);
-        if(binding){
+        if (binding) {
             return;
         }
-        
+
         Leg.i(TAG, "handleStartIntent --------------------------------------------- >");
         //
         mStartIntent = paramIntent;
@@ -196,15 +196,15 @@ public class PlaybackService extends Service {
 
         boolean fs = mStartIntent.getBooleanExtra("com.example.tinyplayer.FreshStart", false);
         boolean savePosition = false;
-        if(isPlaying() && !fs){
+        if (isPlaying() && !fs) {
             savePosition = true;
         }
-        
+
         Presentation p;
 
         if (isSingleVideo(mUris)) {
-            Leg.i(TAG, "single video file");            
-            if(savePosition){
+            Leg.i(TAG, "single video file");
+            if (savePosition) {
                 mMyAVPlayer.savePositionForNextPlayback();
             }
             dismissPresentation(mVideoPresentation, null);
@@ -215,14 +215,14 @@ public class PlaybackService extends Service {
             p = mVideoPresentation;
         } else {
             Leg.i(TAG, "multiple files or single image file");
-            if(savePosition){
-                mMySildShowPlayer.savePositionForNextPlayback();                
+            if (savePosition) {
+                mMySildShowPlayer.savePositionForNextPlayback();
             }
             dismissPresentation(mSlideShowPresentation, null);
-            
+
             mSlideShowPresentation = new PresentationSlideShow(this, display, mMySildShowPlayer);
             mSlideShowPresentation.setMediaUris(mUris);
-            
+
             p = mSlideShowPresentation;
         }
 
@@ -327,7 +327,7 @@ public class PlaybackService extends Service {
     private DisplayManager mDisplayManager;
 
     @SuppressLint("NewApi")
-	private Display findDisplayById(int id) {
+    private Display findDisplayById(int id) {
         String displayCategory = DisplayManager.DISPLAY_CATEGORY_PRESENTATION;
         Display[] displays = mDisplayManager.getDisplays(displayCategory);
 
@@ -345,12 +345,12 @@ public class PlaybackService extends Service {
 
         return ret;
     }
-    
-    public boolean isConnectDisplay(){
-    	String displayCategory = DisplayManager.DISPLAY_CATEGORY_PRESENTATION;
+
+    public boolean isConnectDisplay() {
+        String displayCategory = DisplayManager.DISPLAY_CATEGORY_PRESENTATION;
         Display[] displays = mDisplayManager.getDisplays(displayCategory);
-        if (displays.length > 0) 
-        	return true;
+        if (displays.length > 0)
+            return true;
         return false;
     }
 
@@ -369,8 +369,8 @@ public class PlaybackService extends Service {
         dismissPresentation(mSlideShowPresentation, null);
     }
 
-    public void pausePlayback() {
-    	Log.i(TAG, "pausePlayback()");
+    public void resumePlayback() {
+        Log.i(TAG, "pausePlayback()");
         if (mMyAVPlayer.getPlaybackState() == MyMediaPlayer.PLAYBACK_STATE.PAUSED) {
             mMyAVPlayer.start();
         } else if (mMySildShowPlayer.getPlaybackState() == MyMediaPlayer.PLAYBACK_STATE.PAUSED) {
@@ -378,8 +378,8 @@ public class PlaybackService extends Service {
         }
     }
 
-    public void resumePlayback() {
-    	Log.i(TAG, "resumePlayback()");
+    public void pausePlayback() {
+        Log.i(TAG, "resumePlayback()");
         if (mMyAVPlayer.getPlaybackState() == MyMediaPlayer.PLAYBACK_STATE.PLAYING) {
             mMyAVPlayer.pause();
         } else if (mMySildShowPlayer.getPlaybackState() == MyMediaPlayer.PLAYBACK_STATE.PLAYING) {
@@ -443,46 +443,45 @@ public class PlaybackService extends Service {
     }
 
     @SuppressLint("NewApi")
-	private static void dismissPresentation(Presentation p, Presentation pn) {
+    private static void dismissPresentation(Presentation p, Presentation pn) {
         if (p != null && p.isShowing()) {
             p.dismiss();
         }
         p = pn;
     }
-    
-    public void setPreviousPic(){
-    	
-    	mMySildShowPlayer.setPreviousPic();
+
+    public void setPreviousPic() {
+
+        mMySildShowPlayer.setPreviousPic();
     }
-    
-    public void setNextPic(){
-    	mMySildShowPlayer.setNextPic();
+
+    public void setNextPic() {
+        mMySildShowPlayer.setNextPic();
     }
-    
-    public void setpausePlayback(){
-    	
-    	mMySildShowPlayer.setpausePlayback();
+
+    public void setpausePlayback() {
+
+        mMySildShowPlayer.setpausePlayback();
     }
-    
+
     //
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-        	Log.i(TAG,"::::BroadcastReceiver:::::onReceive");
+            Log.i(TAG, "::::BroadcastReceiver:::::onReceive");
             String cmd = intent.getStringExtra("service_command");
             if (PlayerWidgetProvider.CMDAPPWIDGETUPDATE.equals(cmd)) {
-            	notifyChange(WIDGET_CHANGE);
+                notifyChange(WIDGET_CHANGE);
             }
         }
     };
-    
+
     /**
-     *  App widget: Notify the change-receivers that something has changed.
+     * App widget: Notify the change-receivers that something has changed.
      */
-    public void notifyChange(String what){
-    	Log.i(TAG, "App widget notifyChange, what = "+what);
-    	mAppWidgetProvider.notifyChange(this, what, getPlaybackState());
+    public void notifyChange(String what) {
+        Log.i(TAG, "App widget notifyChange, what = " + what);
+        mAppWidgetProvider.notifyChange(this, what, getPlaybackState());
     }
-    
-    
+
 }
