@@ -2,6 +2,9 @@ package com.example.tinyplayer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -42,6 +45,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
 import com.example.tinyplayer.InlineUtil.Leg;
@@ -74,6 +79,12 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
     private MediaRouter mMediaRouter;
     private DisplayManager mDisplayManager;
     private IntentFilter mIntentfl;
+    
+    private View mediaControllerLayout;
+    private SeekBar mSeekBar;
+    private ImageButton playButton;
+    private ScheduledExecutorService scheduledExecutorService;
+    private Handler handler;
     //
     DisplayMetrics mDefaultDM;
 
@@ -136,6 +147,56 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
             }
 
         }, mIntentfl);
+        
+        mediaControllerLayout = findViewById(R.id.mediaControllerLayout);
+        mSeekBar = (SeekBar) findViewById(R.id.videoSeekBar);
+        mSeekBar.setProgress(0);
+        
+        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar,
+					int progress, boolean fromUser) {
+				if (fromUser) {
+					mPlaybackService.seekTo((int) (progress * 1.0
+							/ seekBar.getMax() * (mPlaybackService.getDuration())));
+					seekBar.setProgress(progress);
+				}
+			}
+        });
+        
+		scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        
+		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						if (mPlaybackService.isPlaying()) {
+							int position = mPlaybackService
+									.getCurrentPosition();
+							int duration = mPlaybackService.getDuration();
+							mSeekBar.setProgress((int) (position
+									/ duration * mSeekBar.getMax()));
+						}
+					}
+				});
+
+			}
+		}, 1000, 1000, TimeUnit.MILLISECONDS);
+        
+        playButton = (ImageButton) findViewById(R.id.playButton);
+        playButton.setOnClickListener(this);
+        
 
     }
 
@@ -267,17 +328,21 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
     public void onClick(View v) {
         if (mPlaybackService == null)
             return;
-        if (v == mPauseImage || v == mVideoSurface) {
+        if (v == mPauseImage || v == mVideoSurface || v == playButton) {
             if (mPlaybackService != null) {
                 MyMediaPlayer.PLAYBACK_STATE state = mPlaybackService.getPlaybackState();
                 switch (state) {
                 case PAUSED:
                     mPlaybackService.resumePlayback();
-                    mPauseImage.setImageResource(R.drawable.ic_media_pause);
+                    mediaControllerLayout.setVisibility(View.VISIBLE);
+                    playButton.setImageResource(R.drawable.ic_media_pause);
+//                    mPauseImage.setImageResource(R.drawable.ic_media_pause);
                     break;
                 case PLAYING:
                     mPlaybackService.pausePlayback();
-                    mPauseImage.setImageResource(R.drawable.ic_media_play);
+                    mediaControllerLayout.setVisibility(View.VISIBLE);
+                    playButton.setImageResource(R.drawable.ic_media_play);
+//                    mPauseImage.setImageResource(R.drawable.ic_media_play);
                     break;
                 default:
                     pickVideo();

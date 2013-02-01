@@ -386,6 +386,20 @@ public class PlaybackService extends Service {
             mMySildShowPlayer.pause();
         }
     }
+    
+    public void seekTo(int msec) {
+    	Log.i(TAG, "seekTo()");
+    	mMyAVPlayer.seekTo(msec);
+    }
+    
+    public int getDuration() {
+    	Log.i(TAG, "getDuration()");
+    	return mMyAVPlayer.getDuration();
+    }
+    
+    public int getCurrentPosition() {
+    	return mMyAVPlayer.getCurrentPosition();
+    }
 
     public void swapLooping() {
         mMyAVPlayer.swapLooping();

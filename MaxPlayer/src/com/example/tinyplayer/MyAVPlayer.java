@@ -393,6 +393,30 @@ class MyAVPlayer extends MyMediaPlayer implements MediaPlayer.OnPreparedListener
             mMediaPlayer.stop();
         }
     }
+    
+    public void seekTo(int msec) {
+    	if (mMediaPlayer != null) {
+    		Leg.i(TAG, "seekTo");
+    		mMediaPlayer.seekTo(msec);
+    	}
+    }
+    
+    public int getDuration() {
+    	Leg.i(TAG, "getDuration()");
+    	if (mMediaPlayer == null) {
+    		return 0;
+    		
+    	}
+		return mMediaPlayer.getDuration();
+    }
+    
+    public int getCurrentDuration() {
+    	if (mMediaPlayer == null) {
+    		return 0;
+    		
+    	}
+		return mMediaPlayer.getCurrentPosition();
+    }
 
     // ======media player event listeners====== //
 

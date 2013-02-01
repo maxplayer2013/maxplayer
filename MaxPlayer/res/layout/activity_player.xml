@@ -36,6 +36,45 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
     </FrameLayout>
+    
+    
+        <RelativeLayout
+            android:id="@+id/mediaControllerLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="55dip"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible" >
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dip"
+                android:background="#50878787" />
+
+            <ImageButton
+                android:id="@+id/playButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15.0dip" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15.0dip"
+                android:layout_marginRight="15.0dip"
+                android:layout_toLeftOf="@id/playButton" >
+
+                <SeekBar
+                    android:id="@+id/videoSeekBar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5.0dip"
+                    android:focusable="false" />
+            </RelativeLayout>
+        </RelativeLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
