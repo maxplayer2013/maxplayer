@@ -405,6 +405,12 @@ public class PlaybackService extends Service {
         mMyAVPlayer.swapLooping();
         mMySildShowPlayer.swapLooping();
     }
+    
+    public boolean isLooping() {
+    	if (mMyAVPlayer.isLooping())
+    		return true;
+		return false;
+    }
 
     public void processActionCommand(Intent intent) {
         String action = intent.getAction();

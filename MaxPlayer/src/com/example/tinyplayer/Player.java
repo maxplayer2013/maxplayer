@@ -1,13 +1,12 @@
 package com.example.tinyplayer;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.MediaRouteActionProvider;
@@ -20,7 +19,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Color;
+import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
 import android.media.MediaRouter;
@@ -42,19 +41,21 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tinyplayer.InlineUtil.Leg;
-import com.example.tinyplayer.widget.PlayerWidgetProvider;
+import com.slidingmenu.lib.SlidingMenu;
+import com.slidingmenu.lib.SlidingMenu.CanvasTransformer;
+import com.slidingmenu.lib.app.SlidingActivity;
 
 @SuppressLint("NewApi")
-public class Player extends Activity implements OnClickListener, OnTouchListener {
+public class Player extends SlidingActivity implements OnClickListener, OnTouchListener {
 
     public static final String TAG = Player.class.getSimpleName();
 
@@ -88,6 +89,13 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
     private Handler handler;
     //
     DisplayMetrics mDefaultDM;
+    
+    private ImageView slidingMenu_open;
+    private TextView slidingMenu_open_text;
+    private ImageView slidingMenu_repeat;
+    private TextView slidingMenu_repeat_text;
+    private ImageView slidingMenu_about;
+    private TextView slidingMenu_about_text;
 
     public Player() {
         super();
@@ -112,7 +120,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         mContentView = getWindow().getDecorView().findViewById(android.R.id.content);
         mBackgroundImage = (ImageView) findViewById(R.id.background);
 
-        mPauseImage = (ImageView) findViewById(R.id.play_pause);
+//        mPauseImage = (ImageView) findViewById(R.id.play_pause);
         mVideoSurface = (SurfaceView) findViewById(R.id.video_surface);
 
         mPreviousButton_slider = (ImageButton) findViewById(R.id.prev);
@@ -123,7 +131,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         mVideoSurface.setAlpha((float) 0.18);
         mVideoSurface.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 
-        mPauseImage.setOnClickListener(this);
+//        mPauseImage.setOnClickListener(this);
         mVideoSurface.setOnClickListener(this);
         mVideoSurface.setOnTouchListener(this);
 
@@ -192,6 +200,10 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
 							Log.d(TAG, "test++++" + Integer.toString(duration) + Integer.toString(position));
 							mSeekBar.setProgress((int) ((float)position
 									/ (float)duration * mSeekBar.getMax()));
+							
+							mediaControllerLayout.setVisibility(View.VISIBLE);
+							playButton.setImageResource(R.drawable.ic_media_pause);
+							
 							Log.d(TAG, "test++++" + (int) (position
 									/ duration * mSeekBar.getMax()));
 						}
@@ -204,9 +216,49 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         playButton = (ImageButton) findViewById(R.id.playButton);
         playButton.setOnClickListener(this);
         
+        
+        //icon show sliding menu
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
+        //sliding menu
+		 setBehindContentView(R.layout.slidingmenu_left);
+		 
+		 // customize the SlidingMenu
+		 SlidingMenu sm = getSlidingMenu();
+		 sm.setMode(SlidingMenu.LEFT);
+		 sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+		 sm.setFadeDegree(0.0f);
+		 sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		 sm.setBehindScrollScale(0.0f);
+		 //animation
+		 sm.setBehindCanvasTransformer(
+				 new CanvasTransformer(){
+					@Override
+					public void transformCanvas(Canvas canvas, float percentOpen) {
+						// TODO Auto-generated method stub
+						Log.d(TAG, "testAni---------------");
+						canvas.translate(0, 0);
+					}
+		 });
+
+        slidingMenu_open = (ImageView) findViewById(R.id.sliding_open);
+        slidingMenu_open_text = (TextView) findViewById(R.id.sliding_open_text);
+        slidingMenu_repeat = (ImageView) findViewById(R.id.sliding_loop);
+        slidingMenu_repeat_text = (TextView) findViewById(R.id.sliding_loop_text);
+        slidingMenu_about = (ImageView) findViewById(R.id.sliding_about);
+        slidingMenu_about_text = (TextView) findViewById(R.id.sliding_about_text);
+
+        slidingMenu_open.setOnClickListener(this);
+        slidingMenu_open_text.setOnClickListener(this);
+        
+        slidingMenu_repeat.setOnClickListener(this);
+        slidingMenu_repeat_text.setOnClickListener(this);
+        
+        slidingMenu_about.setOnClickListener(this);
+        slidingMenu_about_text.setOnClickListener(this);
     }
-
+		 
     private void showSlidingController() {
         mPreviousButton_slider.setVisibility(View.VISIBLE);
         mPlay_pauseButton_slider.setVisibility(View.VISIBLE);
@@ -264,7 +316,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         doBindPlaybackService();
         mMediaRouter.addCallback(MediaRouter.ROUTE_TYPE_LIVE_VIDEO, mMediaRouterCallback);
         mSurfaceHolder.addCallback(mFgSurfaceHolderCB);
-        PlaybackService.STOP_SERVICE_ON_COMPLETE = false;
+        PlaybackService.STOP_SERVICE_ON_COMPLETE = false;   
         super.onResume();
     }
 
@@ -299,10 +351,11 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         super.onNewIntent(intent);
     }
 
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_player, menu);
-
+        
         MenuItem mediaRouteMenuItem = menu.findItem(R.id.menu_media_route);
         if (mediaRouteMenuItem != null) {
             MediaRouteActionProvider mediaRouteActionProvider = (MediaRouteActionProvider) mediaRouteMenuItem
@@ -335,7 +388,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
     public void onClick(View v) {
         if (mPlaybackService == null)
             return;
-        if (v == mPauseImage || v == mVideoSurface || v == playButton) {
+        if (v == mVideoSurface || v == playButton) {
             if (mPlaybackService != null) {
                 MyMediaPlayer.PLAYBACK_STATE state = mPlaybackService.getPlaybackState();
                 switch (state) {
@@ -371,13 +424,27 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         } else if (v == mPlay_pauseButton_slider) {
             mPlaybackService.setpausePlayback();
 
+        } else if (v == slidingMenu_open || v == slidingMenu_open_text) {
+        	pickVideo();
+        	showContent();
+        } else if (v == slidingMenu_repeat || v == slidingMenu_repeat_text) {
+        	if (!mPlaybackService.isLooping()) {
+            	switchLooping();
+            	slidingMenu_repeat.setImageResource(R.drawable.ic_mp_repeat_all_btn);
+        	} else {
+        		switchLooping();
+        		slidingMenu_repeat.setImageResource(R.drawable.ic_mp_repeat_off_btn);
+        	}
+
+        }  else if ( v == slidingMenu_about || v == slidingMenu_about_text ) {
+        	openAboutDialog();
         }
 
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        mPauseImage.setVisibility(View.VISIBLE);
+//        mPauseImage.setVisibility(View.VISIBLE);
         dismissControl();
         return false;
     }
@@ -407,8 +474,12 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
             break;
         case R.id.menu_item_pick_video:
             pickVideo();
-            mPauseImage.setImageResource(R.drawable.ic_media_pause);
+//            mPauseImage.setImageResource(R.drawable.ic_media_pause);
             break;
+        case android.R.id.home:
+        	  Log.d(TAG, "show slidingmenu------");
+        	  showMenu();
+        	  break;
         default:
             break;
         }
@@ -419,7 +490,8 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
         Dialog diaLeg = new AlertDialog.Builder(this)
                 .setTitle("MaxPlayer")
                 .setMessage(
-                        "Version 1.1: \nOuyang Jinmiao, Xie Chen.\n1.Added AppWidget.\n2.Fixed some issues."
+                		"Version 1.2: \nXie Chen.\nAdded sliding menu."
+                        +"\n\nVersion 1.1: \nOuyang Jinmiao, Xie Chen.\n1.Added AppWidget.\n2.Fixed some issues."
                                 + "\n\nVersion 1.0: \nTian Yu, Ouyang JinMiao, Liu Bing, Zhang Lei, Xie Chen."
                                 + "\n1.Added Mircast on Actionbar.\n2.Support playing in backService for video and pictures slide-show.")
                 .setNegativeButton("ok", new DialogInterface.OnClickListener() {
@@ -519,7 +591,7 @@ public class Player extends Activity implements OnClickListener, OnTouchListener
             case DISMISS_CONTROL:
                 if (mPlayer.mPlaybackService.isPlaying()) {
                     Leg.d(TAG, "is playing and dismiss diaLeg timeout 4s");
-                    mPlayer.mPauseImage.setVisibility(View.INVISIBLE);
+//                    mPlayer.mPauseImage.setVisibility(View.INVISIBLE);
                 }
                 break;
             }
