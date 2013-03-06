@@ -42,6 +42,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -50,6 +51,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tinyplayer.InlineUtil.Leg;
+import com.example.tinyplayer.MyMediaPlayer.PLAYBACK_STATE;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.SlidingMenu.CanvasTransformer;
 import com.slidingmenu.lib.app.SlidingActivity;
@@ -96,6 +98,10 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
     private TextView slidingMenu_repeat_text;
     private ImageView slidingMenu_about;
     private TextView slidingMenu_about_text;
+    private CheckBox slidingMenu_desktop;
+    private TextView slidingMenu_desktop_text;
+    
+    private Integer myInt;
 
     public Player() {
         super();
@@ -248,7 +254,9 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
         slidingMenu_repeat_text = (TextView) findViewById(R.id.sliding_loop_text);
         slidingMenu_about = (ImageView) findViewById(R.id.sliding_about);
         slidingMenu_about_text = (TextView) findViewById(R.id.sliding_about_text);
-
+        slidingMenu_desktop = (CheckBox) findViewById(R.id.sliding_desktop);
+        slidingMenu_desktop_text = (TextView) findViewById(R.id.sliding_desktop_text);
+        
         slidingMenu_open.setOnClickListener(this);
         slidingMenu_open_text.setOnClickListener(this);
         
@@ -257,6 +265,8 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
         
         slidingMenu_about.setOnClickListener(this);
         slidingMenu_about_text.setOnClickListener(this);
+        
+        slidingMenu_desktop_text.setOnClickListener(this);
     }
 		 
     private void showSlidingController() {
@@ -364,6 +374,8 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
         }
         return true;
     }
+    
+   
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -372,8 +384,9 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
         if (mPlaybackService != null)
             if (mPlaybackService.mMyAVPlayer != null)
                 Leg.d(TAG, "onConfigurationChanged   ======================================================="
-                        + mPlaybackService.mMyAVPlayer.getCurrentPosition());
-        mPlaybackService.mMyAVPlayer.getCurrentPosition();
+                        + mPlaybackService.mMyAVPlayer.getCurrentPosition() + mPlaybackService.getPlaybackState());
+        
+        mPlaybackService.mMyAVPlayer.getCurrentPosition(); 
     }
 
     @Override
@@ -427,6 +440,7 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
         } else if (v == slidingMenu_open || v == slidingMenu_open_text) {
         	pickVideo();
         	showContent();
+        	
         } else if (v == slidingMenu_repeat || v == slidingMenu_repeat_text) {
         	if (!mPlaybackService.isLooping()) {
             	switchLooping();
@@ -436,8 +450,15 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
         		slidingMenu_repeat.setImageResource(R.drawable.ic_mp_repeat_off_btn);
         	}
 
-        }  else if ( v == slidingMenu_about || v == slidingMenu_about_text ) {
+        }  else if (v == slidingMenu_about || v == slidingMenu_about_text ) {
         	openAboutDialog();
+        	
+        } else if (v == slidingMenu_desktop_text) {
+        	if (slidingMenu_desktop.isChecked()) {
+        		slidingMenu_desktop.setChecked(false);
+        	} else {
+        		slidingMenu_desktop.setChecked(true);
+        	}
         }
 
     }

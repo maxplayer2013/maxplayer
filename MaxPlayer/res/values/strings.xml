@@ -29,5 +29,11 @@
     <string name="accessibility_stop">accessibility_stop</string>
     <string name="accessibility_next">accessibility_next</string>
     <string name="appwidget_text_separator">-</string>
+    
+    <!--  Sliding menu -->
+    <string name="slidingmenu_open">open</string>
+    <string name="slidingmenu_repeat">repeat</string>
+    <string name="slidingmenu_desktop">desktop</string>
+    <string name="slidingmenu_about">about</string>
 
 </resources>
