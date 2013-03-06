@@ -160,7 +160,7 @@
     <dimen name="listPreferredItemPadding">16.0dip</dimen>
     <dimen name="listPreferredItemHeightSmall">48.0dip</dimen>
     
-    <dimen name="slidingmenu_offset">240dp</dimen>
+    <dimen name="slidingmenu_offset">140dp</dimen>
     <dimen name="shadow_width">15dp</dimen>
 
 </resources>

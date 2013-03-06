@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -43,8 +44,11 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -92,17 +96,26 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
     //
     DisplayMetrics mDefaultDM;
     
-    private ImageView slidingMenu_open;
+    //sliding menu
+    private LinearLayout slidingMenu_open;
+    private ImageView slidingMenu_open_image;
     private TextView slidingMenu_open_text;
-    private ImageView slidingMenu_repeat;
-    private TextView slidingMenu_repeat_text;
-    private ImageView slidingMenu_about;
-    private TextView slidingMenu_about_text;
-    private CheckBox slidingMenu_desktop;
-    private TextView slidingMenu_desktop_text;
     
-    private Integer myInt;
-
+    private LinearLayout slidingMenu_repeat;
+    private ImageView slidingMenu_repeat_image;
+    private TextView slidingMenu_repeat_text;
+    
+    private LinearLayout slidingMenu_about;
+    private ImageView slidingMenu_about_image;
+    private TextView slidingMenu_about_text;
+    
+    private LinearLayout sliding_floatwindow;
+    private CheckBox sliding_checkbox_floatwindow;
+    private TextView sliding_floatwindow_text;
+    
+	SharedPreferences settings;
+	SharedPreferences.Editor editor;
+    
     public Player() {
         super();
         mIntentfl = new IntentFilter();
@@ -248,27 +261,63 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
 					}
 		 });
 
-        slidingMenu_open = (ImageView) findViewById(R.id.sliding_open);
+		 slidingMenu_open = (LinearLayout) findViewById(R.id.sliding_open);
+		 slidingMenu_open_image = (ImageView) findViewById(R.id.sliding_open_image);
         slidingMenu_open_text = (TextView) findViewById(R.id.sliding_open_text);
-        slidingMenu_repeat = (ImageView) findViewById(R.id.sliding_loop);
-        slidingMenu_repeat_text = (TextView) findViewById(R.id.sliding_loop_text);
-        slidingMenu_about = (ImageView) findViewById(R.id.sliding_about);
-        slidingMenu_about_text = (TextView) findViewById(R.id.sliding_about_text);
-        slidingMenu_desktop = (CheckBox) findViewById(R.id.sliding_desktop);
-        slidingMenu_desktop_text = (TextView) findViewById(R.id.sliding_desktop_text);
         
+        slidingMenu_repeat = (LinearLayout) findViewById(R.id.sliding_loop);
+        slidingMenu_repeat_image = (ImageView) findViewById(R.id.sliding_loop_image);
+        slidingMenu_repeat_text = (TextView) findViewById(R.id.sliding_loop_text);
+        
+        slidingMenu_about = (LinearLayout) findViewById(R.id.sliding_about);
+        slidingMenu_about_image = (ImageView) findViewById(R.id.sliding_about_image);
+        slidingMenu_about_text = (TextView) findViewById(R.id.sliding_about_text);
+        
+        sliding_floatwindow = (LinearLayout) findViewById(R.id.sliding_floatwindow);
+        sliding_checkbox_floatwindow = (CheckBox) findViewById(R.id.sliding_checkbox_floatwindow);
+        sliding_floatwindow_text = (TextView) findViewById(R.id.sliding_floatwindow_text);
+        
+        slidingMenu_open.setOnClickListener(this);
         slidingMenu_open.setOnClickListener(this);
         slidingMenu_open_text.setOnClickListener(this);
         
         slidingMenu_repeat.setOnClickListener(this);
+        slidingMenu_repeat_image.setOnClickListener(this);
         slidingMenu_repeat_text.setOnClickListener(this);
         
         slidingMenu_about.setOnClickListener(this);
+        slidingMenu_about_image.setOnClickListener(this);
         slidingMenu_about_text.setOnClickListener(this);
         
-        slidingMenu_desktop_text.setOnClickListener(this);
+        sliding_floatwindow.setOnClickListener(this);
+        sliding_floatwindow_text.setOnClickListener(this);
+        
+        sliding_checkbox_floatwindow.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				// TODO Auto-generated method stub
+				boolean float_window_value = sliding_checkbox_floatwindow
+						.isChecked();
+				editor.putBoolean("sliding_checkbox_floatwindow",
+						float_window_value);
+				editor.commit();
+				Log.d(TAG, "<><><><><><><> if float windows set to: " + Boolean.toString(float_window_value));
+			}
+        	
+        });
+        
+        settings = getSharedPreferences("floatWindow", 0);
+        editor = settings.edit();
+        
+        boolean ifPlayInFloatWindow = settings
+       		 .getBoolean("sliding_checkbox_floatwindow", false);
+		 Log.d(TAG, "<><><><><><><> play in float window: " 
+       		 + Boolean.toString(ifPlayInFloatWindow));
+		 sliding_checkbox_floatwindow.setChecked(ifPlayInFloatWindow);
     }
-		 
+    	 
     private void showSlidingController() {
         mPreviousButton_slider.setVisibility(View.VISIBLE);
         mPlay_pauseButton_slider.setVisibility(View.VISIBLE);
@@ -373,9 +422,7 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
             mediaRouteActionProvider.setRouteTypes(MediaRouter.ROUTE_TYPE_LIVE_VIDEO);
         }
         return true;
-    }
-    
-   
+    } 
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -437,30 +484,22 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
         } else if (v == mPlay_pauseButton_slider) {
             mPlaybackService.setpausePlayback();
 
-        } else if (v == slidingMenu_open || v == slidingMenu_open_text) {
+        } else if (v == slidingMenu_open || v == slidingMenu_open_image || v == slidingMenu_open_text) {
         	pickVideo();
         	showContent();
         	
-        } else if (v == slidingMenu_repeat || v == slidingMenu_repeat_text) {
-        	if (!mPlaybackService.isLooping()) {
+        } else if (v == slidingMenu_repeat || v == slidingMenu_repeat_image || v == slidingMenu_repeat_text) {
             	switchLooping();
-            	slidingMenu_repeat.setImageResource(R.drawable.ic_mp_repeat_all_btn);
-        	} else {
-        		switchLooping();
-        		slidingMenu_repeat.setImageResource(R.drawable.ic_mp_repeat_off_btn);
-        	}
-
-        }  else if (v == slidingMenu_about || v == slidingMenu_about_text ) {
+        }  else if (v == slidingMenu_about || v == slidingMenu_about_image || v == slidingMenu_about_text ) {
         	openAboutDialog();
         	
-        } else if (v == slidingMenu_desktop_text) {
-        	if (slidingMenu_desktop.isChecked()) {
-        		slidingMenu_desktop.setChecked(false);
+        } else if (v == sliding_floatwindow || v == sliding_floatwindow_text) {
+        	if (sliding_checkbox_floatwindow.isChecked()) {
+        		sliding_checkbox_floatwindow.setChecked(false);
         	} else {
-        		slidingMenu_desktop.setChecked(true);
+        		sliding_checkbox_floatwindow.setChecked(true);
         	}
         }
-
     }
 
     @Override
@@ -689,6 +728,11 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
     public void switchLooping() {
         if (mPlaybackService != null) {
             mPlaybackService.swapLooping();
+            if(mPlaybackService.isLooping()) {
+            	slidingMenu_repeat_image.setImageResource(R.drawable.ic_mp_repeat_all_btn);
+            } else {
+            	slidingMenu_repeat_image.setImageResource(R.drawable.ic_mp_repeat_off_btn);
+            }
         }
     }
 

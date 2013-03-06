@@ -5,7 +5,7 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_player">MaxPlayer</string>
     <string name="switch_orientation">Toggle orientation</string>
-    <string name="switch_looping">Toggle looping</string>
+    <string name="switch_looping">repeat</string>
 
     <!-- dialog -->
     <string name="display_model_select">Change display model to XXX?</string>
@@ -33,7 +33,7 @@
     <!--  Sliding menu -->
     <string name="slidingmenu_open">open</string>
     <string name="slidingmenu_repeat">repeat</string>
-    <string name="slidingmenu_desktop">desktop</string>
+    <string name="slidingmenu_float_window">floating window</string>
     <string name="slidingmenu_about">about</string>
 
 </resources>

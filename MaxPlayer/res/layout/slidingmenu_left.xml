@@ -5,14 +5,27 @@
     android:background="#88323232"
     android:orientation="vertical" >
 
+    <ImageView 
+        android:id="@+id/sliding_app_icon"
+        android:contentDescription="@string/app_name"
+        android:layout_width="50dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@drawable/icon_large"/>
+    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+    
     <LinearLayout
+        android:id="@+id/sliding_open"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
-            android:id="@+id/sliding_open"
+            android:id="@+id/sliding_open_image"
             android:contentDescription="@string/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,6 +36,7 @@
             android:id="@+id/sliding_open_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/slidingmenu_open"
             android:textSize="20sp" />
     </LinearLayout>
@@ -33,14 +47,13 @@
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/sliding_loop"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
-            android:id="@+id/sliding_loop"
+            android:id="@+id/sliding_loop_image"
             android:contentDescription="@string/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,6 +65,7 @@
             android:id="@+id/sliding_loop_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/slidingmenu_repeat"
             android:textSize="20sp" />
     </LinearLayout>
@@ -62,24 +76,24 @@
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/sliding_floatwindow"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
-        android:layout_marginLeft="15dp"
-        android:gravity="center"
         android:orientation="horizontal" >
 
         <CheckBox
-            android:id="@+id/sliding_desktop"
+            android:id="@+id/sliding_checkbox_floatwindow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true" >
+            android:layout_gravity="center" >
         </CheckBox>
 
         <TextView
-            android:id="@+id/sliding_desktop_text"
+            android:id="@+id/sliding_floatwindow_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/slidingmenu_desktop"
+            android:layout_gravity="center"
+            android:text="@string/slidingmenu_float_window"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -89,24 +103,26 @@
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/sliding_about"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
-        android:gravity="center"
         android:orientation="horizontal" >
 
         <ImageView
-            android:id="@+id/sliding_about"
+            android:id="@+id/sliding_about_image"
             android:contentDescription="@string/app_name"
             android:layout_width="35dp"
             android:layout_height="25dp"
             android:maxHeight="50dip"
             android:scaleType="centerInside"
-            android:src="@drawable/icon_large" />
+            android:layout_gravity="center"
+            android:src="@drawable/about" />
 
         <TextView
             android:id="@+id/sliding_about_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/slidingmenu_about"
             android:textSize="20sp" />
     </LinearLayout>
