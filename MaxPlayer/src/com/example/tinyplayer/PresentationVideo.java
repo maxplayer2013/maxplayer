@@ -11,8 +11,6 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
-
 import com.example.tinyplayer.InlineUtil.Leg;
 
 public class PresentationVideo extends Presentation {

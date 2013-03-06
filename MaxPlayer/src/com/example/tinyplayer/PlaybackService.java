@@ -9,7 +9,6 @@ import com.example.tinyplayer.widget.PlayerWidgetProvider;
 import android.annotation.SuppressLint;
 import android.app.Presentation;
 import android.app.Service;
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,16 +22,12 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
-import android.widget.Toast;
-
 import static com.example.tinyplayer.InlineUtil.*;
 
-@SuppressLint("NewApi")
 public class PlaybackService extends Service {
     private static final String TAG = PlaybackService.class.getSimpleName();
     private final LocalBinder binder = new LocalBinder();
 
-    @SuppressWarnings("unused")
     private Context mApplicationContext;
     private MyNotifier mNotifier;
 
@@ -92,7 +87,6 @@ public class PlaybackService extends Service {
     public MyAVPlayer mMyAVPlayer;
     private MySlideShowPlayer mMySildShowPlayer;
 
-    @SuppressWarnings("unused")
     private Intent mStartIntent;
 
     private List<Uri> mUris = new ArrayList<Uri>();
@@ -326,7 +320,6 @@ public class PlaybackService extends Service {
 
     private DisplayManager mDisplayManager;
 
-    @SuppressLint("NewApi")
     private Display findDisplayById(int id) {
         String displayCategory = DisplayManager.DISPLAY_CATEGORY_PRESENTATION;
         Display[] displays = mDisplayManager.getDisplays(displayCategory);
@@ -462,7 +455,6 @@ public class PlaybackService extends Service {
         }
     }
 
-    @SuppressLint("NewApi")
     private static void dismissPresentation(Presentation p, Presentation pn) {
         if (p != null && p.isShowing()) {
             p.dismiss();

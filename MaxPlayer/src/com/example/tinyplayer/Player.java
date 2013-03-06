@@ -55,12 +55,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tinyplayer.InlineUtil.Leg;
-import com.example.tinyplayer.MyMediaPlayer.PLAYBACK_STATE;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.SlidingMenu.CanvasTransformer;
 import com.slidingmenu.lib.app.SlidingActivity;
 
-@SuppressLint("NewApi")
 public class Player extends SlidingActivity implements OnClickListener, OnTouchListener {
 
     public static final String TAG = Player.class.getSimpleName();
@@ -811,7 +809,6 @@ public class Player extends SlidingActivity implements OnClickListener, OnTouchL
         }
     }
 
-    @SuppressLint("NewApi")
     private final MediaRouter.SimpleCallback mMediaRouterCallback = new MediaRouter.SimpleCallback() {
         @Override
         public void onRouteSelected(MediaRouter router, int type, RouteInfo info) {
